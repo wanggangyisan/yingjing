@@ -5,27 +5,33 @@
     <table class="PolicyTable">
         <thead>
         <tr>
-            <th>姓名</th>
-            <th>性别</th>
-            <th>家庭人数</th>
-            <th>享受政策</th>
-            <th>脱贫状态</th>
+            <th>序号</th>
+            <th>原文件名</th>
+            <th>文章标题</th>
+            <th>上传时间</th>
             <th>操作</th>
         </tr>
         </thead>
-
+        {volist name='data' id='va' key ='i'}
         <tr class="poor_list">
-            <td>werty</td>
+            <td>{$i}</td>
+            <td>{$va.filename}</td>
+            <td>{$va.title}</td>
+            <td>{$va.upload_time|date='Y-m-d H:s',###}</td>
             <td>
-                ghgf
+                <button>编辑</button>
+                <button>删除</button>
             </td>
-            <td>df</td>
-            <td>
-                发展生产{/</td>
-            <td>='</td>
-            <td onclick="family_info('_id')">查看详情</td>
         </tr>
-
+        {/volist}
     </table>
 </div>
+<script>
+    var imgScrs=[];
+    var imgs = document.getElementsByTagName("img");
+    for(var i=0;i<imgs.length;i++){
+        imgScrs.push=imgs [i].src;
+       /* if(i+1<imgs.length)imgScrs+="|";*/
+    }
+</script>
 {/block}
