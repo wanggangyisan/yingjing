@@ -38,8 +38,9 @@ class Index extends Model
         return $data;
     }
     /*修改数据*/
-    public function save_data()
+    public function save_data($data)
     {
-        $res = Db::name('file_info')->update();
+        $res = Db::name('file_info')->update($data);
+        return $res;
     }
 }

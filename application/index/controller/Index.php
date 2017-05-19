@@ -99,5 +99,8 @@ class Index extends Controller
     {
         $data = input();
         return $data;
+        /*实例化模型*/
+        $model = new IndexModel();
+        $res = $model->save_data($data);
     }
 }
