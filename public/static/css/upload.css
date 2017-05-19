@@ -1,0 +1,14 @@
+.PolicyTable{
+    width: 100%;
+    font-size: 0.18rem;
+    opacity: 0.6;
+    border: none;
+    border-collapse: collapse;
+    border-spacing: 0;
+    color: #000;
+    margin-bottom: 0.4rem;
+    position: relative;
+}
+.PolicyTable >thead>tr > th{
+    text-align: center;
+}
