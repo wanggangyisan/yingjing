@@ -26,6 +26,7 @@ class Index extends Model
     {
         $data = Db::name('file_info')
             ->field('id,filename,title,upload_time')
+            ->where('status',0)
             ->page($index_page,20)
             ->order('id desc')
             ->select();
@@ -41,6 +42,12 @@ class Index extends Model
     public function save_data($data)
     {
         $res = Db::name('file_info')->where("id",$data['id'])->update($data);
+        return $res;
+    }
+    /*删除文章 把文章的状态值修改为1*/
+    public function delete_content($id)
+    {
+        $res = Db::name("file_info")->where("id",$id)->update(array("status"=>1));
         return $res;
     }
 }

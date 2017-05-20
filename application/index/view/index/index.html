@@ -1,10 +1,14 @@
 {extend name='public/base'}
 {block name='content'}
 <h2 class="text-center">文章管理列表</h2>
-<div class="text-center">
-    <table class="PolicyTable">
+<div class="text-center col-lg-11">
+    <div class="col-lg-12 text-right">
+        <input type="text" value="" id="search" name="search" placeholder="输入文章标题">
+        <span class="btn-default btn" id="search_btn">搜索</span>
+    </div>
+    <table class="PolicyTable table table-striped">
         <thead>
-        <tr>
+        <tr class="">
             <th>序号</th>
             <th>原文件名</th>
             <th>文章标题</th>
@@ -13,18 +17,30 @@
         </tr>
         </thead>
         {volist name='data' id='va' key ='i'}
-        <tr class="poor_list">
+        <tr class="poor_list" id="list{$va.id}">
             <td>{$i}</td>
             <td>{$va.filename}</td>
             <td>{$va.title}</td>
             <td>{$va.upload_time|date='Y-m-d H:s',###}</td>
             <td>
-                <button class="edit_content" type="button" name="{$va.id}">编辑</button>
-                <button class="delete_content" type="button" name="{$va.id}">删除</button>
+                <button class="edit_content btn-success" type="button" name="{$va.id}">编辑</button>
+                <button class="delete_content btn-danger" type="button" name="{$va.id}">删除</button>
             </td>
         </tr>
         {/volist}
     </table>
+</div>
+<ul class="pagination">
+    <li><a href="#">&laquo;</a></li>
+    <li class="active"><a href="#">1</a></li>
+    <li><a href="#">2</a></li>
+    <li><a href="#">3</a></li>
+    <li><a href="#">4</a></li>
+    <li><a href="#">5</a></li>
+    <li><a href="#">&raquo;</a></li>
+</ul>
+<div class="text-right col-lg-11">
+    <a class="btn btn-success" href="/index/index/form_test">上传新文件</a>
 </div>
 <script>
     $(function () {
@@ -39,9 +55,33 @@
             layer.confirm('您确定要删除这篇文章吗？', {
                 btn: ['确定','取消'] //按钮
             }, function(){
-                layer.msg('那就删除吧', {icon: 1});
+                $.ajax({
+                    url:'delete_article',
+                    type:'post',
+                    data:{id:id},
+                    success:function(data){
+                        if(data){
+                            layer.msg("文章被成功删除",{time:3000,icon:1});
+                            $("list"+id).remove();
+                        }else{
+                            layer.msg("哦豁/(ㄒoㄒ)/~~删除失败",{time:3000,icon:5});
+                        }
+                    }
+                });
             });
         });
+        /*搜索文章标题*/
+        $("#search_btn").click(function () {
+            var search = $("#search").val();
+            get_data_list(search,1);
+        });
+        /*search:搜索内容，index_pge:当前页*/
+        function get_data_list(search,index_page)
+        {
+            $.ajax({
+                url:''
+            });
+        }
     });
 </script>
 {/block}

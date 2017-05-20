@@ -6,29 +6,67 @@
 <div class="container">
     <form class="form-horizontal" role="form">
         <div class="form-group">
-            <label for="firstname" class="col-sm-2 control-label">文章标题</label>
+            <label for="firstname" class="col-sm-2 control-label">文章标题：</label>
             <div class="col-sm-10">
                 <input type="text" class="form-control" id="firstname" value="{$data.title}" placeholder="请输入名字">
             </div>
         </div>
         <div class="form-group">
-            <label for="lastname" class="col-sm-2 control-label">原文件名</label>
+            <label for="lastname" class="col-sm-2 control-label">原文件名：</label>
             <div class="col-sm-10">
                 <input type="text" class="form-control" id="lastname" value="{$data.filename}" placeholder="请输入姓" readonly>
             </div>
         </div>
+        <input type="hidden" value="{$data.id}" id="article_id">
         <div class="form-group">
-            <label for="content">详情</label>
+            <label for="content" class="col-sm-2 control-label">详 &nbsp;&nbsp;&nbsp; 情：</label>
             <div class="col-sm-10">
                 <textarea id="content" class="form-control" rows="7">{$data.content}</textarea>
             </div>
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-default">登录</button>
+                <button type="button" class="btn btn-success">提交</button>
+                <button type="button" class="btn btn-default">取消</button>
             </div>
         </div>
     </form>
 </div>
-
+<script>
+    $(function () {
+        /*取消编辑*/
+        $(".btn-default").click(function () {
+            window.location.href='/index/index/index';
+        });
+        /*提交编辑*/
+        $(".btn-success").click(function () {
+            var article_id = $("#article_id").val();/*文章ID*/
+            var title = $("#firstname").val();/*获取文章标题*/
+            var fileName = $("#lastname").val();/*文章原文件名*/
+            var content = $("#content").text();//UE.getEditor('myEditor').getContent();/*获取编辑器的内容*/
+            $.ajax({
+                url:'/index/index/get_content',
+                type:'post',
+                dataType:'json',
+                data:{
+                    id:article_id,
+                    title:title,
+                    filename:fileName,
+                    content:content
+                },
+                success:function(data){
+                    console.log(data);return;
+                    if(data){
+                        layer.msg("内容修改成功",{time:3000,icon:6});
+                        setTimeout(function(){
+                            window.location.href='/index/index/index';
+                        },3000);
+                    }else{
+                        layer.msg("后台现在很忙，请稍后再试",{time:3000,icon:5});
+                    }
+                }
+            });
+        });
+    });
+</script>
 {/block}

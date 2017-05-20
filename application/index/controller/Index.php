@@ -77,11 +77,16 @@ class Index extends Controller
             return $str;
         }
         /*〓替换成空格*/
-        if(strpos('',$str)){
-            $replace = str_replace('〓','&nbsp;',$str);
+        $replace = str_replace('〓','&nbsp;',$str);
+        if(strpos('〖SM(〗',$replace)|| strpos('〖HT5”〗',$replace)||strpos("[AM]",$replace)){
+            $replace = str_replace('〖SM(〗','',$replace);
+            $replace = str_replace('〖HT5”〗','',$replace);
+            $replace = str_replace('[AM]','',$replace);
         }
-
-
+        if(strpos('〖ZW(*〗',$replace)){
+            $replace = str_replace('〖ZW(*〗','',$replace);
+        }
+        return $replace;
     }
     /*修改文章内容*/
     public function update_content()
@@ -102,5 +107,17 @@ class Index extends Controller
         /*实例化模型*/
         $model = new IndexModel();
         $res = $model->save_data($data);
+        return $res;
     }
+    /*删除文章*/
+    public function delete_article()
+    {
+        $id = input("id");
+        $model = new IndexModel();
+        /*调用删除文章方法*/
+        $res = $model->delete_content($id);
+        /*返回执行结果（因为是修改，返回的是受影响的行数）1*/
+        return $res;
+    }
+
 }
