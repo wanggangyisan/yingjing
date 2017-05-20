@@ -1,10 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{extend name='public/base'}
+{block name='content'}
+<div class="container text-center">
+    <h4>文章编辑</h4>
+</div>
+<div class="container">
+    <form class="form-horizontal" role="form">
+        <div class="form-group">
+            <label for="firstname" class="col-sm-2 control-label">文章标题</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="firstname" value="{$data.title}" placeholder="请输入名字">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="lastname" class="col-sm-2 control-label">原文件名</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="lastname" value="{$data.filename}" placeholder="请输入姓" readonly>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="content">详情</label>
+            <div class="col-sm-10">
+                <textarea id="content" class="form-control" rows="7">{$data.content}</textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-default">登录</button>
+            </div>
+        </div>
+    </form>
+</div>
 
-</body>
-</html>
+{/block}

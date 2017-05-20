@@ -34,13 +34,13 @@ class Index extends Model
     /*根据ID获取数据*/
     public function get_id($id)
     {
-        $data = Db::name('file_info')->where(array('id'=>$id))->find();
+        $data = Db::name('file_info')->where('id',$id)->find();
         return $data;
     }
     /*修改数据*/
     public function save_data($data)
     {
-        $res = Db::name('file_info')->update($data);
+        $res = Db::name('file_info')->where("id",$data['id'])->update($data);
         return $res;
     }
 }

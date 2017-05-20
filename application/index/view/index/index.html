@@ -31,12 +31,16 @@
         /*修改文章*/
         $(".edit_content").click(function () {
             var id = $(this).attr('name');
-            alert(id)
+            window.location.href='/index/index/update_content/id/'+id;
         });
         /*删除文章*/
         $(".delete_content").click(function () {
             var id = $(this).attr('name');
-            alert(id)
+            layer.confirm('您确定要删除这篇文章吗？', {
+                btn: ['确定','取消'] //按钮
+            }, function(){
+                layer.msg('那就删除吧', {icon: 1});
+            });
         });
     });
 </script>

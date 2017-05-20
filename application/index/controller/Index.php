@@ -87,7 +87,7 @@ class Index extends Controller
     public function update_content()
     {
         /*根据ID查询文章内容*/
-        $id = input("file_id");
+        $id = input("id");
         /*实例化模型*/
         $model = new IndexModel();
         $data = $model->get_id($id);
