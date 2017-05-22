@@ -99,6 +99,24 @@ class Index extends Controller
         $this->assign('data',$data);
         return $this->fetch();
     }
+    /*正则替换上标*/
+    public function preg_all_sup($str)
+    {
+        /*寻找待替换内容 只带向上箭头的*/
+        $begin_str = '/[0-9|0-9**]/';
+        /*寻找待替换内容 带向上箭头和括号*/
+        $brack = '/[0-9],[0-9]|[0-9**]/';
+        /*替换后格式*/
+        $end_str = '/<sup>[0-9]</sup>/';
+        preg_replace($begin_str,$end_str,$str);
+
+        return $str;
+    }
+    /*正则替换下标*/
+    public function preg_all_sub($str)
+    {
+
+    }
     /*接收修改后内容*/
     public function get_content()
     {
