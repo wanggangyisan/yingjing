@@ -1,18 +1,31 @@
 {extend name='public/base'}
 {block name='content'}
-<form class="form-horizontal" role="form" id="myForm" action="file_upload" method="post" enctype="multipart/form-data">
-
-    选择文件:<input type="file" id="file1" /><br />
-    <input type="button" id="upload" value="上传" />
-
-</form>
+<div>
+    <form class="form-horizontal col-lg-7" role="form" id="myForm" action="file_upload" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="file1" class="col-sm-2 control-label">选择文件 ：</label>
+            <div class="col-sm-10">
+                <input class="btn" type="file" id="file1" required/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="file1" class="col-sm-2 control-label"></label>
+            <div class="col-sm-10">
+                <button class="btn btn-success text-left" id="upload">上传</button>
+            </div>
+        </div>
+    </form>
+</div>
 <script>
     $(function () {
         $("#upload").click(function () {
             var formData = new FormData();
             formData.append("myfile", document.getElementById("file1").files[0]);
+            if(formData.length==0){
+                layer.msg("请选择文件",{time:3000,icon:0});return;
+            }
             $.ajax({
-                url: "file_upload",
+                url: "/index/index/file_upload",
                 type: "POST",
                 data: formData,
                 /**
@@ -26,14 +39,14 @@
                 processData: false,
                 success: function (data) {
                     if(data.code==1){
-                        alert(data.msg);
-                        window.location.href='/index/index/update_content/file_id/'+data._id;
+                        layer.msg(data.msg,{time:3000,icon:6});
+                        setTimeout(layer.closeAll(),3000);
                     }else{
-                        alert(data.msg);
+                        layer.msg(data.msg,{time:3000,icon:5});
                     }
                 },
                 error: function () {
-                    alert("上传失败！");
+                    layer.msg("文件上传失败",{time:3000,icon:5});
                 }
             });
         });

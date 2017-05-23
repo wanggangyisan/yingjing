@@ -40,10 +40,26 @@
     <li><a href="#">&raquo;</a></li>
 </ul>
 <div class="text-right col-lg-11">
-    <a class="btn btn-success" href="/index/index/form_test">上传新文件</a>
+    <button id="update_file" class="btn btn-success">上传新文件</button>
 </div>
 <script>
     $(function () {
+        /*文件上传*/
+        $("#update_file").click(function () {
+            layer.open({
+                type: 2,
+                title: '文件上传',
+                shadeClose: true,
+                shade: false,
+                maxmin: true, //开启最大化最小化按钮
+                area: ['893px', '600px'],
+                content: '/index/index/form_test',
+                end: function () {
+                    /*ajax请求数据*/
+                     get_data_list('',1)
+                }
+            });
+        });
         /*修改文章*/
         $(".edit_content").click(function () {
             var id = $(this).attr('name');
@@ -75,6 +91,7 @@
             var search = $("#search").val();
             get_data_list(search,1);
         });
+
         /*search:搜索内容，index_pge:当前页*/
         function get_data_list(search,index_page)
         {

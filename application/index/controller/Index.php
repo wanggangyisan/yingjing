@@ -24,7 +24,11 @@ class Index extends Controller
     public function file_upload()
     {
         /*接收表单上传过来的所有数据*/
-        $data = $_FILES['myfile'];
+        if(isset($_FILES['myfile'])){
+            $data = $_FILES['myfile'];
+        }else{
+            return array('code'=>2,'msg'=>'请选择文件！');
+        }
         /*判断文件是否上传*/
         if(!empty($data)){
             /*获取文件后缀名*/
@@ -67,7 +71,6 @@ class Index extends Controller
                 return array('code'=>2,'msg'=>'上传的文件只能是text格式或者fbd格式的');
             }
         }
-
     }
     /*字符转换*/
     public function replace_content($str)
@@ -78,14 +81,19 @@ class Index extends Controller
         }
         /*〓替换成空格*/
         $replace = str_replace('〓','&nbsp;',$str);
-        if(strpos('〖SM(〗',$replace)|| strpos('〖HT5”〗',$replace)||strpos("[AM]",$replace)){
+        if(strpos($replace,'〖SM(〗')|| strpos($replace,'〖HT5”〗')||strpos($replace,"[AM]")){
             $replace = str_replace('〖SM(〗','',$replace);
             $replace = str_replace('〖HT5”〗','',$replace);
             $replace = str_replace('[AM]','',$replace);
         }
-        if(strpos('〖ZW(*〗',$replace)){
+        if(strpos($replace,'〖ZW(*〗')){
             $replace = str_replace('〖ZW(*〗','',$replace);
         }
+        /*替换上标*/
+//        if(){}
+//        $replace = preg_replace("2**","<sup>[0-9,0-9]</sup>",$replace);
+        /*抓取作者*/
+
         return $replace;
     }
     /*修改文章内容*/
@@ -96,12 +104,21 @@ class Index extends Controller
         /*实例化模型*/
         $model = new IndexModel();
         $data = $model->get_id($id);
+        $str = '耿新霞2**,';
+        $a = str_replace('2**','<sup>2**</sup>',$str);
+        var_dump($a);die;
+        $replace = str_replace('〓','&nbsp;',$data['content']);
+        /*PHP保存为UTF-8无BOM编码，然后转换字符串编码为UTF-8，再查找*/
+        mb_convert_encoding($replace, 'utf-8', 'gbk');
+        var_dump(mb_strpos($replace,"关键"));
+        var_dump($replace);
         $this->assign('data',$data);
         return $this->fetch();
     }
     /*接收修改后内容*/
     public function get_content()
     {
+        /*获取修改后的数据*/
         $data = input();
         return $data;
         /*实例化模型*/
@@ -112,6 +129,7 @@ class Index extends Controller
     /*删除文章*/
     public function delete_article()
     {
+        /*获取文章id*/
         $id = input("id");
         $model = new IndexModel();
         /*调用删除文章方法*/
