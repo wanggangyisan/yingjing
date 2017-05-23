@@ -108,8 +108,10 @@ class Index extends Controller
         $brack = '/[0-9],[0-9]|[0-9**]/';
         /*替换后格式*/
         $end_str = '/<sup>[0-9]</sup>/';
+        /*替换后内容 带向上箭头和括号*/
+        $end_barck = '/<sup>[0-9],[0-9]|[0-9**]</sup>/';
         preg_replace($begin_str,$end_str,$str);
-
+        preg_replace($brack,$end_barck,$str);
         return $str;
     }
     /*正则替换下标*/
