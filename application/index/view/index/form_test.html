@@ -5,7 +5,7 @@
         <div class="form-group">
             <label for="file1" class="col-sm-2 control-label">选择文件 ：</label>
             <div class="col-sm-10">
-                <input class="btn" type="file" id="file1" required/>
+                <input class="btn" name="myfile" type="file" id="file1" required/>
             </div>
         </div>
         <div class="form-group">
@@ -24,6 +24,7 @@
             if(formData.length==0){
                 layer.msg("请选择文件",{time:3000,icon:0});return;
             }
+            /**/
             $.ajax({
                 url: "/index/index/file_upload",
                 type: "POST",
@@ -38,6 +39,7 @@
                  */
                 processData: false,
                 success: function (data) {
+                    console.log(data);
                     if(data.code==1){
                         layer.msg(data.msg,{time:3000,icon:6});
                         setTimeout(layer.closeAll(),3000);

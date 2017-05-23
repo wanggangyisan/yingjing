@@ -43,9 +43,33 @@ class Index extends Controller
                 $file = move_uploaded_file($data['tmp_name'],$move_path);
                 if($file){
                     /*获取文件内容*/
-                    $content = file_get_contents($move_path);
+                    $content = file_get_contents($move_path,777);
                     /*调用字符转换的方法*/
                     $replace_content = $this->replace_content(iconv('GBK','UTF-8//IGNORE',$content));
+
+                    /*查找关键词字符出现的位置*/
+                    if(strpos($replace_content,"关键词")){
+                        $appear_keyword  = strpos($replace_content,"关键词");
+                        /*查找摘要出现的位置*/
+                        if(strpos($replace_content,"摘要")){
+                            $appear_abstract = strpos($replace_content,"摘要");
+                            /*截取摘要*/
+                            $begin_abstract = mb_substr($appear_keyword,$appear_abstract,$replace_content);
+                            /*替换上标*/
+                            $sup_abstract =  $this->preg_all_sup($begin_abstract);
+                            /*替换下标*/
+                            $abstract = $this->preg_all_sub($sup_abstract);
+                        }else{
+                            $abstract = '';
+                        }
+                        /*截取关键词,*/
+                        $begin_keyWord = mb_substr($appear_keyword,$appear_keyword+100,$replace_content);
+                        /*替换上标*/
+                        $sup_keyWord = $this->preg_all_sup($begin_keyWord);
+                        /*替换下标*/
+                        $keyWord = $this->preg_all_sub($sup_keyWord);
+                    }else{$keyWord = '';}
+                    /**/
                     /*拼装数据保存道数据库*/
                     $arr = array(
                         'filename'  => $data['name'],/*原文件名*/
@@ -89,9 +113,6 @@ class Index extends Controller
         if(strpos($replace,'〖ZW(*〗')){
             $replace = str_replace('〖ZW(*〗','',$replace);
         }
-        /*替换上标*/
-//        if(){}
-//        $replace = preg_replace("2**","<sup>[0-9,0-9]</sup>",$replace);
         /*抓取作者*/
 
         return $replace;
@@ -104,9 +125,6 @@ class Index extends Controller
         /*实例化模型*/
         $model = new IndexModel();
         $data = $model->get_id($id);
-        $str = '耿新霞2**,';
-        $a = str_replace('2**','<sup>2**</sup>',$str);
-        var_dump($a);die;
         $replace = str_replace('〓','&nbsp;',$data['content']);
         /*PHP保存为UTF-8无BOM编码，然后转换字符串编码为UTF-8，再查找*/
         mb_convert_encoding($replace, 'utf-8', 'gbk');
