@@ -17,9 +17,16 @@ class Index extends Model
     /*把数据保存到数据库*/
     public function upload($arr)
     {
-        /*数据保存入库并返回当前数据的ID*/
-        $data = Db::name('file_info')->insertGetId($arr);
-        return $data;
+        /*根据文件判断文章是否已经上传过、没有上传过直接保存、否则修改*/
+        $article = Db::name("file_info")->where(array("filename"=>$arr['filename']))->find();
+        if($article){
+            /*根据文件名修改文章*/
+            $res = Db::name('file_info')->where("id",$arr['filename'])->update($arr);
+        }else{
+            /*数据保存入库并返回当前数据的ID*/
+            $res = Db::name('file_info')->insertGetId($arr);
+        }
+        return $res;
     }
     /*获取分页数据或者查询数据  $index+page 当前页  每页显示20条数据*/
     public function getAll($index_page)

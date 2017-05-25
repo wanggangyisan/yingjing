@@ -69,12 +69,16 @@ class Index extends Controller
                         /*替换下标*/
                         $keyWord = $this->preg_all_sub($sup_keyWord);
                     }else{$keyWord = '';}
-                    /**/
+                    /*接收标题*/
+                    $title = input("title");
+
                     /*拼装数据保存道数据库*/
                     $arr = array(
                         'filename'  => $data['name'],/*原文件名*/
-                        'title'     => '文章标题',/*文章标题*/
+                        'title'     => $title,/*文章标题*/
                         'content'   => $replace_content,/*文件内容,gbk格式编码转换成utf-8*/
+                        'keyword'   => $keyWord,/*关键词*/
+                        'abstract'  => $abstract,/*摘要*/
                         'file_path' => $file_name,/*文件上传后保存的路径*/
                         'upload_time' => time(),/*文件上传的时间*/
                     );
@@ -83,7 +87,7 @@ class Index extends Controller
                     $Model = new \app\index\model\Index();
                     /*调用保存数据入库的方法保存数据*/
                     $res = $Model->upload($arr);
-                    if($res){
+                    if($res != 0){
                         return array('code'=>1,'msg'=>'文件上传成功！','_id'=>$res);
                     }else{
                         return array('code'=>2,'msg'=>'文件上传失败！');
@@ -96,6 +100,7 @@ class Index extends Controller
             }
         }
     }
+
     /*字符转换*/
     public function replace_content($str)
     {
@@ -112,6 +117,7 @@ class Index extends Controller
         }
         if(strpos($replace,'〖ZW(*〗')){
             $replace = str_replace('〖ZW(*〗','',$replace);
+            $replace = str_replace('〖BFQ〗','',$replace);
         }
         /*抓取作者*/
 
@@ -128,8 +134,8 @@ class Index extends Controller
         $replace = str_replace('〓','&nbsp;',$data['content']);
         /*PHP保存为UTF-8无BOM编码，然后转换字符串编码为UTF-8，再查找*/
         mb_convert_encoding($replace, 'utf-8', 'gbk');
-        var_dump(mb_strpos($replace,"关键"));
-        var_dump($replace);
+//        var_dump(mb_strpos($replace,"关键"));
+//        var_dump($replace);
         $this->assign('data',$data);
         return $this->fetch();
     }
@@ -158,7 +164,6 @@ class Index extends Controller
     {
         /*获取修改后的数据*/
         $data = input();
-        return $data;
         /*实例化模型*/
         $model = new IndexModel();
         $res = $model->save_data($data);
