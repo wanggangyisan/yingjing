@@ -12,3 +12,6 @@
 .PolicyTable >thead>tr > th{
     text-align: center;
 }
+.content-style{
+    padding: 2rem;
+}

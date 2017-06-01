@@ -24,34 +24,19 @@
 <script>
     $(function () {
         $("#upload").click(function () {
-            var formData = new FormData();
-            formData.append("qw",1234);
-            formData.append("myfile", document.getElementById("file1").files[0]);
-//            console.log(formData);return;
-            if(formData.length==0){
-                layer.msg("请选择文件",{time:3000,icon:0});return;
-            }
-            /**/
+            /*ajax请求表单上传*/
             $.ajax({
                 url: "/index/index/file_upload",
-                type: "POST",
-                data: {
-                    formData,
-                    title:$("#title").val(),
-                },
-                /**
-                 *必须false才会自动加上正确的Content-Type
-                 */
-                contentType: false,
-                /**
-                 * 必须false才会避开jQuery对 formdata 的默认处理
-                 * XMLHttpRequest会对 formdata 进行正确的处理
-                 */
+                type: 'POST',
+                cache: false,
+                data: new FormData($('#myForm')[0]),
                 processData: false,
+                contentType: false,
                 success: function (data) {
-                    if(data.code==1){
+                    console.log(data);
+                    if(data.code == 1){
                         layer.msg(data.msg,{time:3000,icon:6});
-                        setTimeout(layer.closeAll(),3000);
+                        setTimeout(parent.layer.closeAll(),3000);
                     }else{
                         layer.msg(data.msg,{time:3000,icon:5});
                     }

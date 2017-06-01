@@ -1,5 +1,20 @@
-{extend name='public/base'}
-{block name='content'}
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:59:"D:\objects\yingjing/application/index\view\index\index.html";i:1495986791;s:59:"D:\objects\yingjing/application/index\view\public\base.html";i:1495759350;}*/ ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<link rel="stylesheet" href="__PUBLIC__/bootstrap/css/bootstrap.css">
+<link rel="stylesheet" href="__PUBLIC__/static/css/upload.css">
+<script src="__PUBLIC__/static/js/jquery.js"></script>
+<script src="__PUBLIC__/static/js/jquery.validate.min.js"></script>
+<!--<script src="__PUBLIC__/static/js/jquery.form.js"></script>-->
+<script src="__PUBLIC__/bootstrap/js/bootstrap.js"></script>
+<script src="__PUBLIC__/layer/layer.js"></script>
+
+<body>
+
 <h2 class="text-center">文章管理列表</h2>
 <div class="text-center col-lg-11">
     <div class="text-left col-lg-11">
@@ -19,22 +34,22 @@
             <th>操作</th>
         </tr>
         </thead>
-        {volist name='data' id='va' key ='i'}
-        <tr class="poor_list" id="list{$va.id}">
-            <td>{$i}</td>
-            <td>{$va.filename}</td>
-            <td><a href="/index/index/article_info/id/{$va.id}">{$va.title}</a></td>
-            <td>{$va.upload_time|date='Y-m-d H:s',###}</td>
+        <?php if(is_array($data) || $data instanceof \think\Collection || $data instanceof \think\Paginator): $i = 0; $__LIST__ = $data;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$va): $mod = ($i % 2 );++$i;?>
+        <tr class="poor_list" id="list<?php echo $va['id']; ?>">
+            <td><?php echo $i; ?></td>
+            <td><?php echo $va['filename']; ?></td>
+            <td><a href="/index/index/article_info/id/<?php echo $va['id']; ?>"><?php echo $va['title']; ?></a></td>
+            <td><?php echo date('Y-m-d H:s',$va['upload_time']); ?></td>
             <td>
-                <button class="edit_content btn-success" type="button" name="{$va.id}">编辑</button>
-                <button class="delete_content btn-danger" type="button" name="{$va.id}">删除</button>
+                <button class="edit_content btn-success" type="button" name="<?php echo $va['id']; ?>">编辑</button>
+                <button class="delete_content btn-danger" type="button" name="<?php echo $va['id']; ?>">删除</button>
             </td>
         </tr>
-        {/volist}
+        <?php endforeach; endif; else: echo "" ;endif; ?>
     </table>
 </div>
 <ul id="pagination" class="pagination">
-   {$page}
+   <?php echo $page; ?>
 </ul>
 
 <script>
@@ -123,4 +138,6 @@
         }
     });
 </script>
-{/block}
+
+</body>
+</html>

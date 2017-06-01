@@ -507,6 +507,7 @@ html #layui_layer_skinlayercss {
     word-break: break-all;
     overflow: hidden;
     font-size: 14px;
+    color: #000000;
     overflow-x: hidden;
     overflow-y: auto
 }

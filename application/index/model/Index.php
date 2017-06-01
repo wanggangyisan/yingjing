@@ -21,23 +21,42 @@ class Index extends Model
         $article = Db::name("file_info")->where(array("filename"=>$arr['filename']))->find();
         if($article){
             /*根据文件名修改文章*/
-            $res = Db::name('file_info')->where("id",$arr['filename'])->update($arr);
+            $res = Db::name('file_info')->where("filename",$arr['filename'])->update($arr);
         }else{
             /*数据保存入库并返回当前数据的ID*/
             $res = Db::name('file_info')->insertGetId($arr);
         }
         return $res;
     }
-    /*获取分页数据或者查询数据  $index+page 当前页  每页显示20条数据*/
-    public function getAll($index_page)
+    /*获取分页数据或者查询数据  $index_page 当前页  $total_page每页显示条数*/
+    public function getAll($index_page,$total_page)
     {
         $data = Db::name('file_info')
             ->field('id,filename,title,upload_time')
             ->where('status',0)
-            ->page($index_page,20)
+            ->page($index_page,$total_page)
             ->order('id desc')
             ->select();
-        return $data;
+        $count = Db::name("file_info")->where("status",0)->count();
+        return array('data'=>$data,'count'=>$count);
+    }
+    /*条件查询*/
+    public function search_data($index_page,$total_page,$search)
+    {
+        /*条件查询数据*/
+        $data = Db::name('file_info')
+                ->field('id,filename,title,upload_time')
+                ->where('status',0)
+                ->where("title like '%".$search."%'")
+                ->page($index_page,$total_page)
+                ->order('id desc')
+                ->select();
+        /*计算查询到的条数*/
+        $count = Db::name("file_info")
+                ->where('status',0)
+                ->where("title like '%".$search."%'")
+                ->count();
+        return array('data'=>$data,'count'=>$count);
     }
     /*根据ID获取数据*/
     public function get_id($id)

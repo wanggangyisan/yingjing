@@ -11,13 +11,58 @@ namespace app\index\controller;
 
 use phpqrcode\QRcode;
 use think\Controller;
+use think\Validate;
+use org\Verify;
 
 class Login extends Controller
 {
     public function login()
     {
-        $qrcode = $this->qrcode();
-        echo $qrcode;
+        return $this->fetch();
+    }
+    /*验证码*/
+    public function verify_cap()
+    {
+        $config = array(
+            'length' => 4,
+            'reset' => true,
+            'useNoise' => false,
+            'useCurve' => false,
+            'fontSize' => 35,
+        );
+        $verify = new Verify($config);
+        $verify->entry();
+    }
+    /*接收表单的数据*/
+    public function login_data()
+    {
+        $data = input();
+        $Verify = new Verify();
+        /*判断验证码是否正确*/
+        if($Verify->check($data['verify'])){
+            $Model = new \app\index\model\Login();
+            /*接收用户数据*/
+            $password = md5("admin".$data['password']);
+            $res = $Model->find_user($data['username'],$password);
+            if($res['code'] == 1){
+                session("user",$res);
+            }
+            return $res;
+        }else{
+            return array('code'=>2,'msg'=>"验证码不正确");
+        }
+    }
+    /*创建用户*/
+    public function crete_user()
+    {
+        $Model = new \app\index\model\Login();
+        $arr = array(
+            'username'  => 'ying',
+            'password'  => md5("admin123"),
+            'create_time'=> time()
+        );
+        $res = $Model->create_data($arr);
+        echo $res;
     }
     /*生成二维码*/
     public function qrcode()

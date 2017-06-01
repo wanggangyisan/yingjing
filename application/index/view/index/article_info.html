@@ -1,0 +1,22 @@
+{extend name='public/base'}
+{block name='content'}
+
+<div class="content-style">
+    <div class="text-center">
+        <h4>{$data.title}</h4>
+    </div>
+    <div class="col-lg-12">
+        <span>摘要：</span>
+        {$data.abstract}
+    </div>
+    <div class="col-lg-12">
+        <span>关键词：</span>
+        {$data.keyword}
+    </div>
+    <div class="col-lg-12">
+        <span>详情</span>
+        {$data.content}
+    </div>
+</div><a href="/index/index/index">
+<button type="button" class="btn btn-success">文章列表</button></a>
+{/block}
